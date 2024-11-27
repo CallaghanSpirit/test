@@ -5,6 +5,24 @@ VIEW_RGB = 3
 VIEW_SRGB = 4
 IT_MAX = 5
 
+class AppContextMenu(wx.Menu):
+    def __init__(self, parent):
+        self.parent = parent
+        super().__init__()
+
+
+        it_min = self.Append(wx.ID_ANY, 'Минизировать')
+        it_max = self.Append(wx.ID_ANY, 'Распахнуть')
+        self.Bind(wx.EVT_MENU,self.onMinimize, it_min)
+        self.Bind(wx.EVT_MENU,self.onMaximaze, it_max)
+    
+    def onMinimize(self,event):
+        self.parent.Iconize()
+
+    def onMaximaze(self,event):
+        self.parent.Maximize()
+
+
 class MyFrame(wx.Frame):
     def  __init__(self, parent, title):
         super().__init__(parent, title = title)
@@ -37,11 +55,13 @@ class MyFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.onQuit, id=APP_EXIT)
 
     
-        self.ctx = wx.Menu()
-        it_min = self.ctx.Append(wx.ID_ANY, 'Минизировать')
-        it_max = self.ctx.Append(wx.ID_ANY, 'Распахнуть')
+        self.ctx = AppContextMenu(self)
+
+        toolbar = self.CreateToolBar()
+        br_quit = 
 
 
+   
     def onStatus(self, event):
          if self.vStatus.IsChecked():
             print('Показать статусную строку')
@@ -50,7 +70,7 @@ class MyFrame(wx.Frame):
     
     def on_right_click(self, event):
         # Показываем контекстное меню
-        self.PopupMenu(self.ctx, event.GetPosition())
+        self.PopupMenu(self.ctx, event.GetPosition()) #Mouse ivent
 
 
     def onQuit(self, event):
