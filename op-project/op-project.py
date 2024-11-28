@@ -25,7 +25,13 @@ class AppContextMenu(wx.Menu):
 
 class MyFrame(wx.Frame):
     def  __init__(self, parent, title):
-        super().__init__(parent, title = title)
+        super().__init__(parent, title = title,size=(731,385))
+        
+        vbox = wx.BoxSizer()
+        
+        img1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("op-project/Рисунок1.jpg"))
+        vbox.Add(img1,wx.ID_ANY)
+        self.SetSizer(vbox)
 
         menubar = wx.MenuBar()
         filemenu = wx.Menu()
@@ -47,7 +53,7 @@ class MyFrame(wx.Frame):
         # item = filemenu.Append(wx.ID_EXIT, 'Выход\tCtrl+Q', 'Выход из приложения')
 
 
-        menubar.Append(filemenu,'File')
+        # menubar.Append(filemenu,'File')
 
         self.SetMenuBar(menubar)
 
@@ -57,9 +63,11 @@ class MyFrame(wx.Frame):
     
         self.ctx = AppContextMenu(self)
 
-        toolbar = self.CreateToolBar()
-        br_quit = 
-
+        # toolbar = self.CreateToolBar()
+        # br_quit = toolbar.AddTool(APP_EXIT,"Выход", wx.Bitmap("op-project/exit.png"))
+        # toolbar.Realize()
+        
+       
 
    
     def onStatus(self, event):
@@ -80,7 +88,7 @@ class MyFrame(wx.Frame):
 
 app = wx.App()
 
-frame = MyFrame(None, title = 'Hello World')
+frame = MyFrame(None, title = 'Мотивация')
 frame.Show()
 frame.Move(-1,-1)
 
