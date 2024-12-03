@@ -27,47 +27,28 @@ class MainFrame(wx.Frame):
     def  __init__(self, parent, style, title):
         super().__init__(parent, title = title, style = style, size=(731,385))
         
-        panel = wx.Panel(self)
+        self.panel = wx.Panel(self)
         vbox = wx.BoxSizer()
 
-        text_box = wx.BoxSizer()
+      
 
-        tx1 = wx.StaticText(panel,label=column_data())
-        text_box.Add(tx1)
+        tx1 = wx.StaticText(self.panel,label=column_data())
+        
          
-        img1 = wx.StaticBitmap(panel, wx.ID_ANY, wx.Bitmap("op-project/Рисунок1.jpg")) 
-        vbox.Add(text_box)
+        img1 = wx.StaticBitmap(self.panel, wx.ID_ANY, wx.Bitmap("op-project/Рисунок1.jpg")) 
+    
 
         
-        vbox.Add(img1,wx.ID_ANY)
-        panel.SetSizer(vbox)
+        vbox.Add(img1)
+        vbox.Add(tx1)
+        self.panel.SetSizer(vbox)
 
-        menubar = wx.MenuBar()
-        filemenu = wx.Menu()
-
-        expmenu = wx.Menu()
-        expmenu.Append(wx.ID_ANY,"Экспорт изображения")
-        expmenu.Append(wx.ID_ANY,"Экспорт видео")
-        expmenu.Append(wx.ID_ANY,"Экспорт даннных")
-
-        filemenu.Append(wx.ID_EXIT, 'Новый\tCtrl+N', )
-        filemenu.Append(wx.ID_EXIT, 'Открыть\tCtrl+O', )
-        filemenu.Append(wx.ID_EXIT, 'Сохранить\tCtrl+S',)
-        filemenu.AppendSubMenu(expmenu, "&Экспорт")
-        filemenu.AppendSeparator()
-        
-        item = wx.MenuItem(filemenu, APP_EXIT, 'Выход\tCtrl+Q', 'Выход из приложения')
-        item.SetBitmap(wx.Bitmap('op-project/exit.png'))
-        filemenu.Append(item)
-        # item = filemenu.Append(wx.ID_EXIT, 'Выход\tCtrl+Q', 'Выход из приложения')
+     
 
 
         # menubar.Append(filemenu,'File')
 
-        self.SetMenuBar(menubar)
 
-        self.Bind(wx.EVT_RIGHT_DOWN, self.on_right_click)
-        self.Bind(wx.EVT_MENU, self.onQuit, id=APP_EXIT)
 
     
         self.ctx = AppContextMenu(self)
@@ -100,45 +81,79 @@ class TestFrame(wx.Frame):
 
         panel = wx.Panel(self)
         vbox = wx.BoxSizer(wx.VERTICAL)
-
-        font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
-        font.SetPointSize(12)
-        panel.SetFont(font)
-
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
-        st1 = wx.StaticText(panel, label='Путь к файлу:')
+        
         tc = wx.TextCtrl(panel)
+        vbox.Add(tc, flag=wx.EXPAND | wx.LEFT | wx.TOP | wx.RIGHT, border=10 )
 
-        hbox.Add(st1, flag=wx.RIGHT , border=8)
-        hbox.Add(tc, proportion=1)
-
-        vbox.Add(hbox, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP , border=10)
+        gbox = wx.GridSizer(5,4,5,5)
         
-        st2 = wx.StaticText(panel, label='Содержимое файла')
-        vbox.Add(st2, flag=wx.EXPAND | wx.ALL, border=10)
+        gbox.AddMany([(wx.Button(panel,label='Cls'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='Bck'),wx.ID_ANY,wx.EXPAND,),
+              (wx.StaticText(panel ,wx.EXPAND,)),
+              (wx.Button(panel,label='Close'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='7'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='8'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='9'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='/'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='4'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='5'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='6'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='*'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='1'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='2'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='3'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='-'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='0'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='.'),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='='),wx.ID_ANY,wx.EXPAND,),
+              (wx.Button(panel,label='+'),wx.ID_ANY,wx.EXPAND,),])
 
-        tc2 = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
-        vbox.Add(tc2, proportion=1, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=10)
+        vbox.Add(gbox, proportion=1, flag=wx.EXPAND | wx.ALL , border=10)
+
+        panel.SetSizer(vbox) 
+
+class TestFrame2(wx.Frame):
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw, size=(731,385))
+
+        self.panel = wx.Panel(self)
+        vbox = wx.BoxSizer()
         
-        btnOK = wx.Button(panel, label='Да', size=(70,30))
-        btnCN = wx.Button(panel, label='Отмена', size=(70,30))
+        gr = wx.GridBagSizer(5, 5)
+        text = wx.StaticText(self.panel, label='Email:')
+        gr.Add(text, pos=(0,0), flag=wx.TOP | wx.LEFT | wx.BOTTOM, border=5 )
+
+        tc = wx.TextCtrl(self.panel)
+        gr.Add(tc, pos=(1, 0), span=(1,5), flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
         
-        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
-        hbox2.Add(btnOK, flag=wx.LEFT, border=10)
-        hbox2.Add(btnCN, flag=wx.LEFT, border=10)
+        buttom1 = wx.Button(self.panel, label='Восстановить', size=(120,28))
+        buttom2 = wx.Button(self.panel, label='Отмена',size=(90,28))
 
-        vbox.Add(hbox2, flag=wx.ALIGN_RIGHT | wx.BOTTOM | wx.RIGHT, border=10)
+        gr.Add(buttom1, pos=(3,3))
+        gr.Add(buttom2, pos=(3,4), flag=wx.RIGHT | wx.BOTTOM, border=10)
+        
+        gr.AddGrowableCol(1)
+        gr.AddGrowableRow(2)
 
-        panel.SetSizer(vbox)
+
+        self.panel.SetSizer(gr)
+
+        # fb.AddGrowableCol(1,1)
+        # fb.AddGrowableRow(3,1)
+        # vbox.Add(fb,proportion=1, flag=wx.EXPAND | wx.ALL, border=10)
+
 
 app = wx.App()
 
 
-frame2=TestFrame(None, title = 'Test', style = wx.DEFAULT_FRAME_STYLE)
-frame2.Show()
+test_frame2=TestFrame(None, title = 'Test', style = wx.DEFAULT_FRAME_STYLE)
+# test_frame2.Show()
+
+test_frame3=TestFrame2(None, title = 'Test2', style = wx.DEFAULT_FRAME_STYLE)
+test_frame3.Show()
 
 frame = MainFrame(None, title = 'Мотивация', style = wx.DEFAULT_FRAME_STYLE )
-frame.Show()
+# frame.Show()
 frame.Move(-1,-1)
 
 app.MainLoop()
