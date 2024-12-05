@@ -1,10 +1,7 @@
 import wx
 from exsel_test import column_data
-APP_EXIT = 1
-VIEW_STATUS = 2
-VIEW_RGB = 3
-VIEW_SRGB = 4
-IT_MAX = 5
+BUTTON1 = 1
+BUTTON2 = 2
 
 class AppContextMenu(wx.Menu):
     def __init__(self, parent):
@@ -142,14 +139,65 @@ class TestFrame2(wx.Frame):
         # fb.AddGrowableRow(3,1)
         # vbox.Add(fb,proportion=1, flag=wx.EXPAND | wx.ALL, border=10)
 
+class TestFrame3(wx.Frame):
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw, size=(731,385))
+
+        self.panel = wx.Panel(self)
+        vbox = wx.BoxSizer()
+        
+        fr = wx.FlexGridSizer(5,5,10,10)
+
+        btn1 = wx.Button(self.panel ,id=BUTTON1, label='Кнопка 1', size=(50,50) )
+
+        btn1.Bind(wx.EVT_BUTTON, self.onButton)
+        self.panel.Bind(wx.EVT_BUTTON, self.onButtonPanel)
+        self.Bind(wx.EVT_BUTTON, self.onButtonFrame)
+
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+
+        self.panel.Unbind(wx.EVT_BUTTON)
+        
+        
+
+        fr.AddMany([(btn1,wx.ID_ANY,wx.EXPAND),
+                    
+        ])
+
+        vbox.Add(fr)
+        self.panel.SetSizer(vbox)
+
+    
+    def onButton(self, event):
+        print("Уровень кнопки")
+        event.Skip()
+
+    def onButtonPanel(self, event):
+        print("Уровень панели")
+        event.Skip()
+
+    def onButtonFrame(self, event):
+        print("Уровень окна")
+
+    def OnCloseWindow(self, event):
+        dial = wx.MessageDialog(None, 'Вы точно хотите выйти?', 'Вопрос', wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+        
+        ret = dial.ShowModal()
+        if ret == wx.ID_YES:
+            self.Destroy()
+        else:
+            event.Veto()
 
 app = wx.App()
 
 
-test_frame2=TestFrame(None, title = 'Test', style = wx.DEFAULT_FRAME_STYLE)
+test_frame=TestFrame(None, title='Test', style=wx.DEFAULT_FRAME_STYLE)
 # test_frame2.Show()
 
-test_frame3=TestFrame2(None, title = 'Test2', style = wx.DEFAULT_FRAME_STYLE)
+test_frame2=TestFrame2(None, title='Test2', style=wx.DEFAULT_FRAME_STYLE)
+# test_frame2.Show()
+
+test_frame3=TestFrame3(None, title='Test3', style=wx.DEFAULT_FRAME_STYLE)
 test_frame3.Show()
 
 frame = MainFrame(None, title = 'Мотивация', style = wx.DEFAULT_FRAME_STYLE )
