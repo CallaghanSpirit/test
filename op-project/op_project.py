@@ -1,7 +1,7 @@
 import wx
 from exsel_test import column_data
-BUTTON1 = 1
-BUTTON2 = 2
+BUTTON1 = wx.NewIdRef()
+BUTTON2 = wx.NewIdRef()
 
 class AppContextMenu(wx.Menu):
     def __init__(self, parent):
@@ -148,7 +148,7 @@ class TestFrame3(wx.Frame):
         
         fr = wx.FlexGridSizer(5,5,10,10)
 
-        btn1 = wx.Button(self.panel ,id=BUTTON1, label='Кнопка 1', size=(50,50) )
+        btn1 = wx.Button(self.panel ,id=BUTTON1.GetId(), label='Кнопка 1', size=(50,50) )
 
         btn1.Bind(wx.EVT_BUTTON, self.onButton)
         self.panel.Bind(wx.EVT_BUTTON, self.onButtonPanel)
@@ -166,6 +166,7 @@ class TestFrame3(wx.Frame):
 
         vbox.Add(fr)
         self.panel.SetSizer(vbox)
+        print(btn1.GetId())
 
     
     def onButton(self, event):
@@ -188,6 +189,30 @@ class TestFrame3(wx.Frame):
         else:
             event.Veto()
 
+class TestFrame4(wx.Frame):
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw, size=(731,385))
+
+        self.panel = wx.Panel(self)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+
+        self.panel.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        self.panel.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+   
+        self.panel.SetSizer(vbox)
+    
+    def OnKeyDown(self, event):
+        key = event.GetKeyCode()
+        if key == wx.WXK_ESCAPE:
+            ret = wx.MessageBox('Выйти надо?', 'Вопрос', wx.YES_NO | wx.NO_DEFAULT, self)
+
+            if ret == wx.YES:
+                self.Close()
+
+    def OnKeyUp(self, event):
+        print('ОтпустилиКнопку')
+    
+
 app = wx.App()
 
 
@@ -198,7 +223,11 @@ test_frame2=TestFrame2(None, title='Test2', style=wx.DEFAULT_FRAME_STYLE)
 # test_frame2.Show()
 
 test_frame3=TestFrame3(None, title='Test3', style=wx.DEFAULT_FRAME_STYLE)
-test_frame3.Show()
+# test_frame3.Show()
+
+test_frame4=TestFrame4(None, title='Test3', style=wx.DEFAULT_FRAME_STYLE)
+test_frame4.Show()
+
 
 frame = MainFrame(None, title = 'Мотивация', style = wx.DEFAULT_FRAME_STYLE )
 # frame.Show()
