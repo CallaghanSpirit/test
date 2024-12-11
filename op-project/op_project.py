@@ -212,6 +212,22 @@ class TestFrame4(wx.Frame):
     def OnKeyUp(self, event):
         print('ОтпустилиКнопку')
     
+class TestFrame5(wx.Frame):
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw, size=(731,385))
+        
+        toolbar = self.CreateToolBar()
+        br_quit = toolbar.AddTool(wx.ID_ANY, "Выход", wx.Bitmap('op-project/exit.png'))
+        toolbar.Realize()
+
+        self.Bind(wx.EVT_TOOL, self.onQuit, br_quit)
+
+
+    def onQuit(self, event):
+        dlg = wx.TextEntryDialog(self, 'Введите имя:', "Ввод данных...", "noname")
+        res = dlg.ShowModal()
+        if res == wx.ID_OK:
+            print(dlg.GetValue())  
 
 app = wx.App()
 
@@ -225,9 +241,11 @@ test_frame2=TestFrame2(None, title='Test2', style=wx.DEFAULT_FRAME_STYLE)
 test_frame3=TestFrame3(None, title='Test3', style=wx.DEFAULT_FRAME_STYLE)
 # test_frame3.Show()
 
-test_frame4=TestFrame4(None, title='Test3', style=wx.DEFAULT_FRAME_STYLE)
-test_frame4.Show()
+test_frame4=TestFrame4(None, title='Test4', style=wx.DEFAULT_FRAME_STYLE)
+# test_frame4.Show()
 
+test_frame5=TestFrame5(None, title='Test5', style=wx.DEFAULT_FRAME_STYLE)
+test_frame5.Show()
 
 frame = MainFrame(None, title = 'Мотивация', style = wx.DEFAULT_FRAME_STYLE )
 # frame.Show()
