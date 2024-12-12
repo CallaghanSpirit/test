@@ -3,6 +3,8 @@ from exsel_test import column_data
 BUTTON1 = wx.NewIdRef()
 BUTTON2 = wx.NewIdRef()
 
+
+
 class AppContextMenu(wx.Menu):
     def __init__(self, parent):
         self.parent = parent
@@ -214,7 +216,7 @@ class TestFrame4(wx.Frame):
     
 class TestFrame5(wx.Frame):
     def __init__(self, *args, **kw):
-        super().__init__(*args, **kw, size=(731,385))
+        super().__init__(*args, **kw,)
         
         toolbar = self.CreateToolBar()
         br_quit = toolbar.AddTool(wx.ID_ANY, "Выход", wx.Bitmap('op-project/exit.png'))
@@ -229,6 +231,96 @@ class TestFrame5(wx.Frame):
         if res == wx.ID_OK:
             print(dlg.GetValue())  
 
+
+class MyDlg(wx.Dialog):
+    def __init__(self,parent,  *args, **kw):
+        super().__init__(parent, *args, **kw)
+
+        self.parent = parent
+
+class TestFrame6(wx.Frame):
+    def __init__(self, *args, **kw):
+          super().__init__(*args, **kw, size=(731,385))
+
+          toolbar = self.CreateToolBar()
+          br_quit = toolbar.AddTool(wx.ID_ANY, 'Выход', wx.Bitmap("op-project/exit.png"))
+          dialog = toolbar.AddTool(wx.ID_ANY, 'Диалог', wx.Bitmap("op-project/sound.png"))
+          toolbar.Realize()
+
+          self.Bind(wx.EVT_TOOL, self.OnQuit, br_quit)
+          self.Bind(wx.EVT_TOOL, self.onDialog, dialog)
+    
+    def onDialog(self, event):
+        with MyDlg(self, title='Мой диалог...') as dlg:
+           res = dlg.ShowModal()
+
+
+
+
+    def OnQuit(self, event):
+        self.Close() 
+      
+class Witgets(wx.Frame):
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw, size=(731,500))
+        self.B_RED = 1
+        self.B_GREEN = 2
+        self.B_BLUE = 3
+        self.sb = self.CreateStatusBar()
+        self.sb.SetStatusText("Текст в статусной скроке")
+
+        panel = wx.Panel(self)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        panel.SetSizer(vbox)
+
+        st = wx.StaticText(panel, label='Адрес: ')
+        vbox.Add(st, flag=wx.ALL, border=10)
+
+        inp = wx.TextCtrl(panel, value="г. Москва")
+        vbox.Add(inp, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=10)
+
+        vbox.Add(wx.StaticLine(panel), flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=10)
+
+        rtb = wx.ToggleButton(panel, id=self.B_RED, label='red')
+        gtb = wx.ToggleButton(panel, id=self.B_GREEN, label='green')
+        btb = wx.ToggleButton(panel, id=self.B_BLUE, label='blue')
+
+        self.col = wx.Colour(0, 0, 0)
+        self.pn = wx.Panel(panel)
+        self.pn.SetBackgroundColour(self.col.GetAsString())
+
+        vb1 = wx.GridBagSizer(10, 10)
+        vb1.Add(rtb, (0,0))
+        vb1.Add(gtb, (1,0))
+        vb1.Add(btb, (2,0))
+        vb1.Add(self.pn, (0,1), (3,1), flag=wx.EXPAND)
+        vb1.AddGrowableCol(1)
+
+        vbox.Add(vb1, flag=wx.EXPAND | wx.ALL, border=10)
+
+        rtb.Bind(wx.EVT_TOGGLEBUTTON, self.onToggle)
+        gtb.Bind(wx.EVT_TOGGLEBUTTON, self.onToggle)
+        btb.Bind(wx.EVT_TOGGLEBUTTON, self.onToggle)
+
+    def onToggle(self, event):
+        btn = event.GetEventObject()
+        val = 255 if btn.GetValue() else 0
+        id = btn.GetId()
+
+        r = self.col.Red()
+        g = self.col.Green()
+        b = self.col.Blue()
+
+        match id:
+            case self.B_RED:
+                self.col.Set(val, g, b)
+            case self.B_BLUE:
+                self.col.Set(r, g, val)
+            case self.B_GREEN:
+                self.col.Set(r, val, b)
+
+        self.pn.SetBackgroundColour(self.col)
+        self.pn.Refresh()
 app = wx.App()
 
 
@@ -245,7 +337,13 @@ test_frame4=TestFrame4(None, title='Test4', style=wx.DEFAULT_FRAME_STYLE)
 # test_frame4.Show()
 
 test_frame5=TestFrame5(None, title='Test5', style=wx.DEFAULT_FRAME_STYLE)
-test_frame5.Show()
+# test_frame5.Show()
+
+test_frame6=TestFrame6(None, title='Test6', style=wx.DEFAULT_FRAME_STYLE)
+# test_frame6.Show()
+
+widgets=Witgets(None, title='widgets', style=wx.DEFAULT_FRAME_STYLE)
+widgets.Show()
 
 frame = MainFrame(None, title = 'Мотивация', style = wx.DEFAULT_FRAME_STYLE )
 # frame.Show()
