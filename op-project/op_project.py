@@ -302,6 +302,79 @@ class Witgets(wx.Frame):
         gtb.Bind(wx.EVT_TOGGLEBUTTON, self.onToggle)
         btb.Bind(wx.EVT_TOGGLEBUTTON, self.onToggle)
 
+        vbox.Add(wx.StaticLine(panel), flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=10)
+
+        pn2=wx.Panel(panel)
+        wx.StaticBox(pn2, label="Ваш пол", size=(150, 50))
+        rd1 = wx.RadioButton(pn2, label='Муж', pos=(10, 20), style=wx.RB_GROUP)
+        rd2 = wx.RadioButton(pn2, label='Жен', pos=(100, 20))
+
+        vbox2=wx.BoxSizer(wx.HORIZONTAL)
+        vbox2.Add(pn2)
+
+        agree = wx.CheckBox(panel, label='Согласен на обработку')
+        agree.SetValue(True)
+
+        vbox2.Add(agree, flag=wx.LEFT | wx.TOP, border=20)
+
+        links = ['телефон', 'e-mail', 'skype']
+        cb = wx.ComboBox(panel, choices=links, style=wx.CB_READONLY)
+        cb.SetSelection(0)
+
+        vbox2.Add(cb, flag=wx.LEFT | wx.TOP, border=15)
+        
+        sc = wx.SpinCtrl(panel, value='0', min=-100, max=100)
+        vbox2.Add(sc, flag=wx.LEFT | wx.TOP, border=15)
+
+        vbox.Add(vbox2, flag=wx.EXPAND | wx.ALL, border=10)
+
+        self.gauge = wx.Gauge(panel, range=100)
+        vbox.Add(self.gauge, flag=wx.EXPAND | wx.ALL, border=10)
+
+        bStart = wx.Button(panel, label='Cтарт')
+        bStop  = wx.Button(panel, label='Cтоп')
+
+        hbox3 = wx.BoxSizer()
+        hbox3.AddMany([(bStart, 0, wx.LEFT | wx.RIGHT, 10), (bStop, 0, wx.LEFT |wx.RIGHT | wx.BOTTOM, 10)])
+
+        vbox.Add(hbox3, flag=wx.ALIGN_CENTER)
+
+        bStart.Bind(wx.EVT_BUTTON, self.onStart)
+        bStop.Bind(wx.EVT_BUTTON, self.onStop)
+
+        self.timer = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER, self.OnTimer, self.timer)
+
+        self.count = 0
+
+        sld = wx.Slider(panel, value=200, minValue=150, maxValue=500, style=wx.SL_HORIZONTAL)
+        vbox.Add(sld, flag = wx.EXPAND| wx.ALL, border=10)
+
+        sld.Bind(wx.EVT_SCROLL, self.OnSliderScroll)
+
+    def OnSliderScroll(self, e):
+        val = e.GetEventObject().GetValue()
+        self.sb.SetStatusText('Slider: '+ str(val))    
+        
+
+    def OnTimer(self, e):
+        self.count = self.count + 1 
+        self.gauge.SetValue(self.count)
+
+        if self.count >= 100:
+            self.timer.Stop()
+
+    
+    def onStart(self, e):
+        if self.count > 100:
+            return 
+        
+        self.timer.Start(100)
+
+    def onStop(self, e):
+       self.timer.Stop()
+       self.count = 0
+ 
     def onToggle(self, event):
         btn = event.GetEventObject()
         val = 255 if btn.GetValue() else 0
@@ -321,6 +394,8 @@ class Witgets(wx.Frame):
 
         self.pn.SetBackgroundColour(self.col)
         self.pn.Refresh()
+
+
 app = wx.App()
 
 
