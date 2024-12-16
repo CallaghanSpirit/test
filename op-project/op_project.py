@@ -1,8 +1,9 @@
 import wx
+import wx.html
+
 from exsel_test import column_data
 BUTTON1 = wx.NewIdRef()
 BUTTON2 = wx.NewIdRef()
-
 
 
 class AppContextMenu(wx.Menu):
@@ -395,6 +396,28 @@ class Witgets(wx.Frame):
         self.pn.SetBackgroundColour(self.col)
         self.pn.Refresh()
 
+class Widgets2(wx.Frame):
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw, size=(1000,600))
+
+        tabs = wx.Notebook(self, id=wx.ID_ANY)
+        splitter = wx.SplitterWindow(tabs, wx.ID_ANY, style=wx.SP_LIVE_UPDATE)
+
+        self.urls = ['op-project/htm/1_1.html']
+        listbox = wx.ListBox(splitter, choices=self.urls)
+
+        self.htmlwin = wx.html.HtmlWindow(splitter, wx.ID_ANY, style=wx.NO_BORDER)
+        self.htmlwin.SetStandardFonts(12)
+        self.htmlwin.LoadPage(self.urls[0])
+
+        splitter.SplitVertically(listbox, listbox)
+        splitter.SetMinimumPaneSize(200)
+
+        tabs.InsertPage(0,splitter, "Главная", select=True)
+        
+        
+
+
 
 app = wx.App()
 
@@ -418,7 +441,10 @@ test_frame6=TestFrame6(None, title='Test6', style=wx.DEFAULT_FRAME_STYLE)
 # test_frame6.Show()
 
 widgets=Witgets(None, title='widgets', style=wx.DEFAULT_FRAME_STYLE)
-widgets.Show()
+# widgets.Show()
+
+widgets2=Widgets2(None, title='widgets', style=wx.DEFAULT_FRAME_STYLE)
+widgets2.Show()
 
 frame = MainFrame(None, title = 'Мотивация', style = wx.DEFAULT_FRAME_STYLE )
 # frame.Show()
