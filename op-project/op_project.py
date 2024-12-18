@@ -1,5 +1,6 @@
 import wx
 import wx.html
+import math
 
 from exsel_test import column_data
 BUTTON1 = wx.NewIdRef()
@@ -416,6 +417,19 @@ class Widgets2(wx.Frame):
         tabs.InsertPage(0,splitter, "Главная", select=True)
         
         
+class Graphics(wx.Frame):
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw, size=(600, 600))
+
+        self.btm = wx.Bitmap(wx.GetDisplaySize())
+        self.btmDC = wx.MemoryDC()
+        self.btmDC.SelectObject(self.btm)
+
+        self.Bind(wx.EVT_PAINT, self.onDraw)
+
+    def onDraw(self, e):
+        dc = wx.PaintDC(self)
+        dc.DrawBitmap(wx.Bitmap('op-project/Рисунок1.jpg'), (0, 0))
 
 
 
@@ -444,7 +458,10 @@ widgets=Witgets(None, title='widgets', style=wx.DEFAULT_FRAME_STYLE)
 # widgets.Show()
 
 widgets2=Widgets2(None, title='widgets', style=wx.DEFAULT_FRAME_STYLE)
-widgets2.Show()
+# widgets2.Show()
+
+graphics=Graphics(None, title='graphics', style=wx.DEFAULT_FRAME_STYLE)
+graphics.Show()
 
 frame = MainFrame(None, title = 'Мотивация', style = wx.DEFAULT_FRAME_STYLE )
 # frame.Show()
